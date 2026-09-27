@@ -1,5 +1,6 @@
 """Portable native UI. No listening port or automatic upload to a server."""
 import json
+import os
 import queue
 import sys
 import threading
@@ -10,13 +11,25 @@ from tp3.models import CATALOG, data_root, atomic_json
 
 
 def main():
+    # PyInstaller --windowed has no console streams. Download progress libraries
+    # still write to stderr, so supply a sink instead of leaving it as None.
+    if sys.stdout is None:
+        sys.stdout = open(os.devnull, 'w', encoding='utf-8')
+    if sys.stderr is None:
+        sys.stderr = open(os.devnull, 'w', encoding='utf-8')
     if '--self-test' in sys.argv:
         import av
         import ctranslate2
         from faster_whisper import WhisperModel
         from tp3.formats import exports
         assert 'WEBVTT' in exports([])['vtt']
-        print('Imports and export smoke test OK; inference not tested.')
+        if os.name == 'nt':
+            import tkinter as tk
+            window = tk.Tk()
+            window.withdraw()
+            window.update_idletasks()
+            window.destroy()
+        print('Imports, export and Windows Tk initialization OK; inference not tested.')
         return
     import tkinter as tk
     from tkinter import ttk, filedialog, messagebox

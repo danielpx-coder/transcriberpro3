@@ -30,7 +30,7 @@ Também foi executado o fluxo ASGI completo com o motor real: upload do WAV → 
 
 `.github/workflows/ci.yml` executa testes Python, lint PHP, teste de rotas com funções WordPress substituídas, checagem JavaScript e empacotamento do plugin. O job Windows constrói via PyInstaller e executa `--self-test` do executável empacotado antes de produzir ZIP.
 
-O smoke test do executável verifica importações/bibliotecas e exportação, sem download de modelo nem GUI interativa. A presença do workflow não significa que uma execução passou: confira a execução específica do commit no Actions.
+O smoke test do executável verifica importações/bibliotecas, exportação e inicialização de uma janela Tk oculta no Windows, sem download de modelo nem interação com a GUI. A presença do workflow não significa que uma execução passou: confira a execução específica do commit no Actions.
 
 ## Homologação pendente no Windows real
 
