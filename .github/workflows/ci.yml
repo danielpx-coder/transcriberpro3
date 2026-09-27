@@ -1,0 +1,42 @@
+name: Tests and Windows package
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  tests:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+          cache-dependency-path: requirements-*.txt
+      - run: pip install -r requirements-dev.txt
+      - run: python -m pytest -q
+      - run: php -l transcriberpro3.php
+      - run: php tests/test-plugin.php
+      - run: node --check assets/app.js
+      - run: python scripts/package-plugin.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: wordpress-plugin
+          path: dist/transcriberpro3-wordpress.zip
+  windows:
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Build portable application (Python bundled)
+        shell: pwsh
+        run: ./scripts/build-windows.ps1
+      - uses: actions/upload-artifact@v4
+        with:
+          name: TranscriberPro3-windows-x64
+          path: dist/TranscriberPro3-windows-x64.zip

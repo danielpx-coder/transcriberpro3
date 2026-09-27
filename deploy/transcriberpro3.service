@@ -1,0 +1,31 @@
+[Unit]
+Description=Transcriber Pro 3 private CPU worker
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=transcriberpro3
+Group=transcriberpro3
+WorkingDirectory=/opt/transcriberpro3
+EnvironmentFile=/etc/transcriberpro3.env
+Environment=TP3_DATA_DIR=/var/lib/transcriberpro3
+Environment=HF_HOME=/var/lib/transcriberpro3/huggingface
+Environment=OMP_NUM_THREADS=2
+ExecStart=/opt/transcriberpro3/.venv/bin/uvicorn server.app:create_app --factory --host 127.0.0.1 --port 8766 --workers 1 --limit-concurrency 12 --timeout-keep-alive 5
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=30
+StateDirectory=transcriberpro3
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/transcriberpro3
+MemoryMax=4G
+CPUQuota=200%
+TasksMax=128
+
+[Install]
+WantedBy=multi-user.target
