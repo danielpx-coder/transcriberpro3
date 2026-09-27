@@ -59,3 +59,15 @@ O smoke test do executável verifica importações/bibliotecas, exportação e i
 - [ ] Medir memória e CPU com gravações longas antes de liberar modelos/usuários adicionais.
 
 Não foram implantadas alterações na VPS nem instalados componentes no computador do usuário.
+
+## Resultado confirmado do GitHub Actions
+
+Execução [36288661448](https://github.com/danielpx-coder/transcriberpro3/actions/runs/36288661448), código do commit `83405723976ecd8e357ce3bda1029a22b7050f96`: **jobs Linux e Windows aprovados**.
+
+- Linux/Python 3.11: 15 testes, lint PHP, contrato de rotas/capacidade com substitutos WordPress, checagem JS e ZIP do plugin aprovados.
+- Windows Server 2022/Python 3.11: PyInstaller produziu o ZIP; o executável passou em imports de dependências, exportação e abertura/fechamento de Tk oculto. Não houve teste de inferência Windows nem interação humana com a GUI.
+- Artefatos: `TranscriberPro3-windows-x64` (aproximadamente 97 MiB) e `wordpress-plugin`, disponíveis na execução acima. O download do artefato contém o ZIP interno: extraia o arquivo do Actions antes de usar o ZIP do plugin no WordPress.
+- SHA-256 do **ZIP Windows interno**: `B945E4A30FE088AC49D56F0FF31FB4F4F9686EDF330D7930FB163D5055DABFF7`.
+- Artefatos do Actions não são uma Release permanente. Nesta execução, a expiração informada é 26/12/2026; publique uma cópia homologada para distribuição aos usuários.
+
+A falha inicial do CI foi a busca padrão por `requirements.txt`, incompatível com os arquivos separados do projeto; `cache-dependency-path: requirements-*.txt` corrigiu a configuração. A execução citada acima passou após a correção. Este registro posterior altera apenas documentação, preservando o código validado.
