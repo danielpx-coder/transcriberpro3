@@ -24,6 +24,8 @@ Este relatório separa testes executados de verificações que dependem do ambie
 
 O modelo `tiny` foi baixado do Hugging Face (~75 MB de pesos), verificado com os hashes do upstream e carregado pelo faster-whisper/CTranslate2 em CPU. Um WAV de 1 segundo de silêncio foi processado e gerou as três saídas, sem segmentos de fala. Em seguida, `python -m scripts.smoke-real --cache /tmp/tp3-real-models` repetiu a inferência e executou novamente com conexões de rede bloqueadas no processo: ambas concluíram e produziram saídas iguais. Isso confirma execução real e reuso offline neste Linux; **não comprova qualidade de reconhecimento de voz, funcionamento da GUI ou compatibilidade Windows**.
 
+Também foi executado o fluxo ASGI completo com o motor real: upload do WAV → fila SQLite → inferência CPU com tiny → consulta das três saídas. A cópia do áudio enviado foi removida após conclusão. Esse teste não inclui PHP, WordPress, Nginx ou uma conexão HTTP externa.
+
 ## Automação adicionada
 
 `.github/workflows/ci.yml` executa testes Python, lint PHP, teste de rotas com funções WordPress substituídas, checagem JavaScript e empacotamento do plugin. O job Windows constrói via PyInstaller e executa `--self-test` do executável empacotado antes de produzir ZIP.
